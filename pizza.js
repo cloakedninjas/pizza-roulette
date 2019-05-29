@@ -30,6 +30,8 @@ class Pizza {
     this.slices = [];
     this.arcSize = PI_2 / this.sliceCount;
 
+    this.ctx.translate(padding / 2, padding / 2);
+
     for (let i = 0; i < this.sliceCount; i++) {
       this.drawSlice(i);
     }
