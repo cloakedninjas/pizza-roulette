@@ -13,9 +13,9 @@ class Pizza {
     this.strokeStyle = '#000';
     this.lineWidth = this.radius * 0.02;
 
-    const padding = 50;
-    this.el.width = (this.radius * 2) + padding;
-    this.el.height = (this.radius * 2) + padding;
+    this.padding = 50;
+    this.el.width = (this.radius * 2) + this.padding;
+    this.el.height = (this.radius * 2) + this.padding;
 
     this.names = [
       'Tinky Winky',
@@ -29,11 +29,26 @@ class Pizza {
     this.sliceCount = this.names.length;
     this.slices = [];
     this.arcSize = PI_2 / this.sliceCount;
-
-    this.ctx.translate(padding / 2, padding / 2);
+    this.removeSequence = [];
+    this.slicesRemoved = [];
+    this.pepPositions = [];
 
     for (let i = 0; i < this.sliceCount; i++) {
-      this.drawSlice(i);
+      this.removeSequence.push(i);
+      this.slicesRemoved.push(false);
+    }
+
+    this.ctx.translate(this.padding / 2, this.padding / 2);
+    this.drawPizza();
+  }
+
+  drawPizza() {
+    this.ctx.clearRect(0, 0, this.el.width, this.el.height);
+
+    for (let i = 0; i < this.sliceCount; i++) {
+      if (!this.slicesRemoved[i]) {
+        this.drawSlice(i);
+      }
     }
   }
 
@@ -68,8 +83,13 @@ class Pizza {
     // pepperoni
     const midArc = arcEnd - (this.arcSize / 2);
 
-    const pepX = this.radius + Math.cos(midArc) * this.randBetween(this.pepMinDist, this.pepMaxDist);
-    const pepY = this.radius + Math.sin(midArc) * this.randBetween(this.pepMinDist, this.pepMaxDist);
+    if (!this.pepPositions[index]) {
+      this.pepPositions[index] = [
+        this.radius + Math.cos(midArc) * this.randBetween(this.pepMinDist, this.pepMaxDist),
+        this.radius + Math.sin(midArc) * this.randBetween(this.pepMinDist, this.pepMaxDist)
+      ];
+    }
+    const [pepX, pepY] = this.pepPositions[index];
 
     ctx.beginPath();
     ctx.ellipse(pepX, pepY, this.pepSize, this.pepSize, 0, 0, PI_2);
@@ -95,6 +115,24 @@ class Pizza {
     ctx.fillText(initials, 0, 0);
 
     ctx.restore();
+  }
+
+  removeSlice() {
+    const randIndex = Math.floor(Math.random() * this.removeSequence.length);
+    const indexRemoved = this.removeSequence.splice(randIndex, 1);
+
+    this.slicesRemoved[indexRemoved] = true;
+  }
+
+  startConsuming() {
+    setTimeout(() => {
+      this.removeSlice();
+      this.drawPizza();
+
+      if (this.removeSequence.length > 1) {
+        this.startConsuming();
+      }
+    }, 1000);
   }
 
   randBetween(min, max) {
