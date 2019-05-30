@@ -67,11 +67,24 @@ class Pizza {
 
     // crust
     const crustSize = this.radius * 0.1;
-    ctx.strokeStyle = '#ff6f36';
-    ctx.lineWidth = crustSize;
+    ctx.strokeStyle = this.strokeStyle;
+    ctx.lineWidth = this.lineWidth;
+    ctx.fillStyle = '#ff6f36';
+
+    const x1 = Math.cos(arcStart) * this.radius + this.radius;
+    const y1 = Math.sin(arcStart) * this.radius + this.radius;
+    const x2 = Math.cos(arcStart) * (this.radius - crustSize) + this.radius;
+    const y2 = Math.sin(arcStart) * (this.radius - crustSize) + this.radius;
+    const x3 = Math.cos(arcEnd) * this.radius + this.radius;
+    const y3 = Math.sin(arcEnd) * this.radius + this.radius;
 
     ctx.beginPath();
-    ctx.arc(this.radius, this.radius, this.radius - crustSize / 2, arcStart, arcEnd);
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.arc(this.radius, this.radius, this.radius - crustSize, arcStart, arcEnd);
+    ctx.lineTo(x3, y3);
+    ctx.arc(this.radius, this.radius, this.radius, arcEnd, arcStart, true);
+    ctx.fill();
     ctx.stroke();
 
     // pepperoni
