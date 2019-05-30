@@ -5,26 +5,20 @@ class Pizza {
     this.el = el;
     this.ctx = el.getContext('2d');
 
-    // radius in pixels
-    this.radius = 200;
+    const smallestDimension = Math.min(window.innerWidth, window.innerHeight);
+
+    this.padding = 50;
+    this.radius = ((smallestDimension - this.padding) / 2) * window.devicePixelRatio;
     this.pepSize = this.radius * 0.15;
     this.pepMinDist = this.radius * 0.4;
     this.pepMaxDist = this.radius * 0.8;
     this.strokeStyle = '#000';
     this.lineWidth = this.radius * 0.02;
 
-    this.padding = 50;
-    this.el.width = (this.radius * 2) + this.padding;
-    this.el.height = (this.radius * 2) + this.padding;
+    this.el.width = this.radius * 2 + this.padding;
+    this.el.height = this.radius * 2 + this.padding;
 
-    this.names = [
-      'Tinky Winky',
-      'Dipsy',
-      'La La',
-      'Po',
-      'John McClane',
-      'J R R Tolkien'
-    ];
+    this.names = ['Tinky Winky', 'Dipsy', 'La La', 'Po', 'John McClane', 'J R R Tolkien'];
 
     this.sliceCount = this.names.length;
     this.slices = [];
@@ -77,11 +71,11 @@ class Pizza {
     ctx.lineWidth = crustSize;
 
     ctx.beginPath();
-    ctx.arc(this.radius, this.radius, this.radius - (crustSize / 2), arcStart, arcEnd);
+    ctx.arc(this.radius, this.radius, this.radius - crustSize / 2, arcStart, arcEnd);
     ctx.stroke();
 
     // pepperoni
-    const midArc = arcEnd - (this.arcSize / 2);
+    const midArc = arcEnd - this.arcSize / 2;
 
     if (!this.pepPositions[index]) {
       this.pepPositions[index] = [
@@ -100,9 +94,13 @@ class Pizza {
     ctx.stroke();
 
     // text label
-    const initials = this.names[index].split(' ').map((part) => {
-      return part[0];
-    }).join('').substring(0, 3);
+    const initials = this.names[index]
+        .split(' ')
+        .map((part) => {
+          return part[0];
+        })
+        .join('')
+        .substring(0, 3);
 
     ctx.save();
     ctx.translate(pepX, pepY);
@@ -111,7 +109,7 @@ class Pizza {
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '20px Arial';
+    ctx.font = 20 * window.devicePixelRatio + 'px Arial';
     ctx.fillText(initials, 0, 0);
 
     ctx.restore();
