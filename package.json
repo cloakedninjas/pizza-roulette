@@ -1,0 +1,23 @@
+{
+  "name": "pizza-roulette",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pizza.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloakedninjas/pizza-roulette.git"
+  },
+  "author": "Daniel Jackson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloakedninjas/pizza-roulette/issues"
+  },
+  "homepage": "https://github.com/cloakedninjas/pizza-roulette#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-google": "^0.13.0"
+  }
+}
